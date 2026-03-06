@@ -1,0 +1,91 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.20.1
+  name: qdrantclusters.vector.qdrant.cloud
+spec:
+  group: vector.qdrant.cloud
+  names:
+    kind: QdrantCluster
+    listKind: QdrantClusterList
+    plural: qdrantclusters
+    singular: qdrantcluster
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: QdrantCluster is the Schema for the qdrantclusters API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: spec defines the desired state of QdrantCluster
+            properties:
+              grpcPort:
+                default: 6334
+                description: GRPCPort is the gRPC API port.
+                format: int32
+                type: integer
+              httpPort:
+                default: 6333
+                description: HTTPPort is the REST API port.
+                format: int32
+                type: integer
+              size:
+                description: Size is the number of Qdrant nodes to deploy.
+                format: int32
+                minimum: 1
+                type: integer
+              storageSize:
+                default: 10Gi
+                description: StorageSize defines the size of the Persistent Volume
+                  for vector data.
+                type: string
+              version:
+                default: latest
+                description: Version is the Qdrant docker image tag (e.g., "latest"
+                  or "v1.7.0").
+                type: string
+            required:
+            - size
+            type: object
+          status:
+            description: status defines the observed state of QdrantCluster
+            properties:
+              clusterState:
+                description: ClusterState indicates the current health (e.g., "Provisioning",
+                  "Ready", "Failed")
+                type: string
+              readyReplicas:
+                description: ReadyReplicas shows how many Qdrant nodes are currently
+                  running and ready.
+                format: int32
+                type: integer
+            required:
+            - readyReplicas
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
