@@ -1,0 +1,14 @@
+apiVersion: vector.qdrant.cloud/v1alpha1
+kind: QdrantCluster
+metadata:
+  labels:
+    app.kubernetes.io/name: project-cloud
+    app.kubernetes.io/managed-by: kustomize
+  name: my-first-qdrant
+spec:
+  # TODO(user): Add fields here
+  size: 2
+  version: "v1.17.0"
+  storageSize: "5Gi"
+  httpPort: 6333
+  grpcPort: 6334
